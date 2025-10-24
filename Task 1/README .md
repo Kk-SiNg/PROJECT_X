@@ -19,27 +19,25 @@
 
 1. I first used this error calculation method:
 
-'''
-  if(s[0]==0 && s[1]==1 && s[2]==1 && s[3]==1 && s[4]==1) error = -4; 
-  else if (s[0]==0 && s[1]==0 && s[2]==1 && s[3]==1 && s[4]==1) error = -3;
-  else if (s[0]==1 && s[1]==0 && s[2]==1 && s[3]==1 && s[4]==1) error = -2;
-  else if (s[0]==1 && s[1]==0 && s[2]==0 && s[3]==1 && s[4]==1) error = -1;
-  else if (s[0]==1 && s[1]==1 && s[2]==0 && s[3]==1 && s[4]==1) error = 0;   // Perfectly centered
-  else if (s[0]==1 && s[1]==1 && s[2]==0 && s[3]==0 && s[4]==1) error = 1;
-  else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==0 && s[4]==1) error = 2;
-  else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==0 && s[4]==0) error = 3;
-  else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==1 && s[4]==0) error = 4; /
-  
-  // If the bot is completely off the line (all sensors see white),
-  // we can assume it went off in the direction of the last known error.
-  // This helps it turn back towards the line.
-  else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==1 && s[4]==1) {
-      if (lastError > 0) {
-          error = 5; // Or a value larger than max
-      } else {
-          error = -5; // Or a value smaller than min
-      }
-  }'''
+if (s[0]==0 && s[1]==1 && s[2]==1 && s[3]==1 && s[4]==1) error = -4; 
+else if (s[0]==0 && s[1]==0 && s[2]==1 && s[3]==1 && s[4]==1) error = -3;
+else if (s[0]==1 && s[1]==0 && s[2]==1 && s[3]==1 && s[4]==1) error = -2;
+else if (s[0]==1 && s[1]==0 && s[2]==0 && s[3]==1 && s[4]==1) error = -1;
+else if (s[0]==1 && s[1]==1 && s[2]==0 && s[3]==1 && s[4]==1) error = 0;   // Perfectly centered
+else if (s[0]==1 && s[1]==1 && s[2]==0 && s[3]==0 && s[4]==1) error = 1;
+else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==0 && s[4]==1) error = 2;
+else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==0 && s[4]==0) error = 3;
+else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==1 && s[4]==0) error = 4;
+// If the bot is completely off the line (all sensors see white),
+// we can assume it went off in the direction of the last known error.
+// This helps it turn back towards the line.
+else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==1 && s[4]==1) {
+    if (lastError > 0) {
+        error = 5; // Or a value larger than max
+    } else {
+        error = -5; // Or a value smaller than min
+    }
+}
 
 but this has some problems like sudden jumps in error values ex:
 
@@ -79,6 +77,7 @@ Error = 10 / 2 = 5 (This is our "in-between" value! It's perfectly continuous.)
  * S5 (Far Right)-> GPIO 27
  *
  * L298N Motor Driver Inputs:
+ * one IN pin is to rotate motor cw and other ak.
  * -- Right Motor --
  * IN1 -> GPIO 14
  * IN2 -> GPIO 12
@@ -89,5 +88,10 @@ Error = 10 / 2 = 5 (This is our "in-between" value! It's perfectly continuous.)
  * IN4 -> GPIO 2
  * ENB -> GPIO 4  (PWM)
  
+# tuning the values of PID gains
+- take the values of k_i and k_d = 0 and increase k_p until it oscillates around target line with some steady state offset
+- increase the value of k_i to remove offset without paying care on oscillations, error should finally converge to 0
+- now increase k_d to remove oscillations
+
 
 *please note that i had no idea about data like PID constants and what should be the value of integaralimit so i used gemini for that*
