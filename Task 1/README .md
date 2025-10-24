@@ -39,7 +39,7 @@
       } else {
           error = -5; // Or a value smaller than min
       }
-  }'''
+  } '''
 
 but this has some problems like sudden jumps in error values ex:
 
