@@ -18,6 +18,7 @@
 ### Weighted Average method:
 
 1. I first used this error calculation method:
+```cpp
 
 if (s[0]==0 && s[1]==1 && s[2]==1 && s[3]==1 && s[4]==1) error = -4; 
 else if (s[0]==0 && s[1]==0 && s[2]==1 && s[3]==1 && s[4]==1) error = -3;
@@ -38,6 +39,8 @@ else if (s[0]==1 && s[1]==1 && s[2]==1 && s[3]==1 && s[4]==1) {
         error = -5; // Or a value smaller than min
     }
 }
+
+```
 
 but this has some problems like sudden jumps in error values ex:
 
